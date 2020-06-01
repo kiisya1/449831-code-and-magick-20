@@ -32,15 +32,7 @@ var renderText = function (ctx, text, x, y) {
   ctx.fillText(text, x, y);
 };
 
-var renderBar = function (ctx, player, time, maxTime, i) {
-  var barX = CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i;
-  var barHeight = (CHART_HEIGHT * time) / maxTime;
-  var barY = CLOUD_Y + TEXT_HEIGHT * 3 + GAP + (CHART_HEIGHT - barHeight);
-  var scoreY = CLOUD_Y + TEXT_HEIGHT * 2 + GAP + (CHART_HEIGHT - barHeight);
-
-  renderText(ctx, player, barX, playersNameY);
-  renderText(ctx, Math.round(time), barX, scoreY);
-
+var renderBar = function (ctx, player, barX, barY, barHeight) {
   ctx.fillStyle = (player === 'Вы') ? 'rgba(255, 0, 0, 1)' : getRandomBlue();
 
   ctx.fillRect(barX, barY, BAR_WIDTH, barHeight);
@@ -50,8 +42,16 @@ var renderBar = function (ctx, player, time, maxTime, i) {
 var renderChart = function (ctx, players, times) {
   var maxTime = getMaxElement(times);
 
-  players.forEach(function (item, i) {
-    renderBar(ctx, item, times[i], maxTime, i);
+  players.forEach(function (player, i) {
+    var barX = CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i;
+    var barHeight = (CHART_HEIGHT * times[i]) / maxTime;
+    var barY = CLOUD_Y + TEXT_HEIGHT * 3 + GAP + (CHART_HEIGHT - barHeight);
+    var scoreY = CLOUD_Y + TEXT_HEIGHT * 2 + GAP + (CHART_HEIGHT - barHeight);
+
+    renderText(ctx, player, barX, playersNameY);
+    renderText(ctx, Math.round(times[i]), barX, scoreY);
+
+    renderBar(ctx, player, barX, barY, barHeight);
   });
 };
 
