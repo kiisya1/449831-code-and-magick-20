@@ -10,6 +10,7 @@ var BAR_GAP = 50;
 var TEXT_HEIGHT = 20;
 var BAR_WIDTH = 40;
 var CHART_HEIGHT = 150;
+var playersNameY = CLOUD_Y + CLOUD_HEIGHT - GAP / 2 - TEXT_HEIGHT;
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
@@ -24,30 +25,42 @@ var getRandomBlue = function () {
   return 'hsl(240, ' + Math.floor(Math.random() * 100) + '%, 50%)';
 };
 
+var renderText = function (ctx, text, x, y) {
+  ctx.font = '16px PT Mono';
+  ctx.fillStyle = '#000000';
+  ctx.textBaseline = 'hanging';
+  ctx.fillText(text, x, y);
+};
+
+var renderBar = function (ctx, player, time, maxTime, i) {
+  var barX = CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i;
+  var barHeight = (CHART_HEIGHT * time) / maxTime;
+  var barY = CLOUD_Y + TEXT_HEIGHT * 3 + GAP + (CHART_HEIGHT - barHeight);
+  var scoreY = CLOUD_Y + TEXT_HEIGHT * 2 + GAP + (CHART_HEIGHT - barHeight);
+
+  renderText(ctx, player, barX, playersNameY);
+  renderText(ctx, Math.round(time), barX, scoreY);
+
+  ctx.fillStyle = (player === 'Вы') ? 'rgba(255, 0, 0, 1)' : getRandomBlue();
+
+  ctx.fillRect(barX, barY, BAR_WIDTH, barHeight);
+
+};
+
+var renderChart = function (ctx, players, times) {
+  var maxTime = getMaxElement(times);
+
+  players.forEach(function (item, i) {
+    renderBar(ctx, item, times[i], maxTime, i);
+  });
+};
+
 window.renderStatistics = function (ctx, players, times) {
   renderCloud(ctx, CLOUD_X + CLOUD_GAP, CLOUD_Y + CLOUD_GAP, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#ffffff');
 
-  ctx.font = '16px PT Mono';
-  ctx.fillStyle = '#000000';
-  ctx.textBaseline = 'hanging';
-  ctx.fillText('Ура вы победили!', CLOUD_X + GAP, CLOUD_Y + GAP);
-  ctx.fillText('Список результатов:', CLOUD_X + GAP, CLOUD_Y + GAP + TEXT_HEIGHT);
+  renderText(ctx, 'Ура вы победили!', CLOUD_X + GAP, CLOUD_Y + GAP);
+  renderText(ctx, 'Список результатов:', CLOUD_X + GAP, CLOUD_Y + GAP + TEXT_HEIGHT);
 
-  for (var i = 0; i < players.length; i++) {
-    var maxTime = getMaxElement(times);
-
-    ctx.fillStyle = '#000000';
-
-    ctx.fillText(players[i], CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, CLOUD_Y + CLOUD_HEIGHT - GAP / 2 - TEXT_HEIGHT);
-    ctx.fillText(Math.round(times[i]), CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, CLOUD_Y + TEXT_HEIGHT * 2 + GAP + (CHART_HEIGHT - (CHART_HEIGHT * times[i]) / maxTime));
-
-    if (players[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    } else {
-      ctx.fillStyle = getRandomBlue();
-    }
-
-    ctx.fillRect(CLOUD_X + BAR_GAP + (BAR_GAP + BAR_WIDTH) * i, CLOUD_Y + TEXT_HEIGHT * 3 + GAP + (CHART_HEIGHT - (CHART_HEIGHT * times[i]) / maxTime), BAR_WIDTH, (CHART_HEIGHT * times[i]) / maxTime);
-  }
+  renderChart(ctx, players, times);
 };
