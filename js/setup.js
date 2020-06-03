@@ -16,17 +16,21 @@ var surnames = ['да Марья', 'Верон', 'Мирабелла', 'Валь
 var coatColors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var eyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
 
-// Вычисляет случайное число от min до (max+1)
+// Вычисляет случайное число от min до max
 
 var generateRandomNumber = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
 };
 
+// Выбирает случайное значение из массива данных
+
 var generateProperty = function (array) {
   var randomNumber = generateRandomNumber(0, (array.length - 1));
   return array[randomNumber];
 };
+
+// Генерирует массив объектов из случайных значений
 
 var generateObjects = function () {
   var wizards = [];
@@ -40,6 +44,8 @@ var generateObjects = function () {
   return wizards;
 };
 
+// Генерирует dom-элемент
+
 var renderWizard = function (wizard) {
   var wizardElement = similarTemplate.cloneNode(true);
   var wizardName = wizardElement.querySelector('.setup-similar-label');
@@ -52,6 +58,8 @@ var renderWizard = function (wizard) {
 
   return wizardElement;
 };
+
+// Добавляет dom-элементы на страницу
 
 var renderWizardList = function () {
   var wizardsList = generateObjects();
