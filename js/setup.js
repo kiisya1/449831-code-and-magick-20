@@ -4,6 +4,7 @@ var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Крис�
 var SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+var NUMBER_OF_WIZARDS = 4;
 
 var setup = document.querySelector('.setup');
 var similarBlock = setup.querySelector('.setup-similar');
@@ -56,9 +57,7 @@ var getWizardElement = function (wizard) {
 
 // Добавляет dom-элементы на страницу
 
-var wizards = generateWizardsObjects(4);
-
-var renderWizards = function () {
+var renderWizards = function (wizards) {
   var similarList = similarBlock.querySelector('.setup-similar-list');
   var fragment = document.createDocumentFragment();
 
@@ -76,5 +75,6 @@ var showSetupWindow = function () {
   similarBlock.classList.remove('hidden');
 };
 
-renderWizards();
+var wizards = generateWizardsObjects(NUMBER_OF_WIZARDS);
+renderWizards(wizards);
 showSetupWindow();
