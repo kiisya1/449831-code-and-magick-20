@@ -10,7 +10,6 @@ var BAR_GAP = 50;
 var TEXT_HEIGHT = 20;
 var BAR_WIDTH = 40;
 var CHART_HEIGHT = 150;
-var playersNameY = CLOUD_Y + CLOUD_HEIGHT - GAP / 2 - TEXT_HEIGHT;
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
@@ -34,9 +33,7 @@ var renderText = function (ctx, text, x, y) {
 
 var renderBar = function (ctx, player, barX, barY, barHeight) {
   ctx.fillStyle = (player === 'Вы') ? 'rgba(255, 0, 0, 1)' : getRandomBlue();
-
   ctx.fillRect(barX, barY, BAR_WIDTH, barHeight);
-
 };
 
 var renderChart = function (ctx, players, times) {
@@ -47,6 +44,7 @@ var renderChart = function (ctx, players, times) {
     var barHeight = (CHART_HEIGHT * times[i]) / maxTime;
     var barY = CLOUD_Y + TEXT_HEIGHT * 3 + GAP + (CHART_HEIGHT - barHeight);
     var scoreY = CLOUD_Y + TEXT_HEIGHT * 2 + GAP + (CHART_HEIGHT - barHeight);
+    var playersNameY = CLOUD_Y + CLOUD_HEIGHT - GAP / 2 - TEXT_HEIGHT;
 
     renderText(ctx, player, barX, playersNameY);
     renderText(ctx, Math.round(times[i]), barX, scoreY);
