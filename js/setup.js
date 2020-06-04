@@ -1,20 +1,12 @@
 'use strict';
 
+var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
+var SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
+var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+
 var setup = document.querySelector('.setup');
 var similarBlock = setup.querySelector('.setup-similar');
-var similarList = similarBlock.querySelector('.setup-similar-list');
-var similarTemplate = document.querySelector('#similar-wizard-template')
-    .content
-    .querySelector('.setup-similar-item');
-
-var fragment = document.createDocumentFragment();
-
-setup.classList.remove('hidden');
-
-var names = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var surnames = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var coatColors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-var eyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
 
 // Вычисляет случайное число от min до max
 
@@ -25,20 +17,20 @@ var generateRandomNumber = function (min, max) {
 
 // Выбирает случайное значение из массива данных
 
-var generateProperty = function (array) {
+var getRandomElement = function (array) {
   var randomNumber = generateRandomNumber(0, (array.length - 1));
   return array[randomNumber];
 };
 
 // Генерирует массив объектов из случайных значений
 
-var generateObjects = function () {
+var generateWizardsObjects = function (number) {
   var wizards = [];
-  for (var i = 0; i < 4; i++) {
+  for (var i = 0; i < number; i++) {
     var wizard = {};
-    wizard.name = generateProperty(names) + ' ' + generateProperty(surnames);
-    wizard.coatColor = generateProperty(coatColors);
-    wizard.eyesColor = generateProperty(eyesColors);
+    wizard.name = getRandomElement(NAMES) + ' ' + getRandomElement(SURNAMES);
+    wizard.coatColor = getRandomElement(COAT_COLORS);
+    wizard.eyesColor = getRandomElement(EYES_COLORS);
     wizards.push(wizard);
   }
   return wizards;
@@ -46,8 +38,11 @@ var generateObjects = function () {
 
 // Генерирует dom-элемент
 
-var renderWizard = function (wizard) {
-  var wizardElement = similarTemplate.cloneNode(true);
+var getWizardElement = function (wizard) {
+  var wizardTemplate = document.querySelector('#similar-wizard-template')
+      .content
+      .querySelector('.setup-similar-item');
+  var wizardElement = wizardTemplate.cloneNode(true);
   var wizardName = wizardElement.querySelector('.setup-similar-label');
   var wizardCoat = wizardElement.querySelector('.wizard-coat');
   var wizardEyes = wizardElement.querySelector('.wizard-eyes');
@@ -61,15 +56,25 @@ var renderWizard = function (wizard) {
 
 // Добавляет dom-элементы на страницу
 
-var renderWizardList = function () {
-  var wizardsList = generateObjects();
+var wizards = generateWizardsObjects(4);
 
-  wizardsList.forEach(function (wizard) {
-    fragment.appendChild(renderWizard(wizard));
+var renderWizards = function () {
+  var similarList = similarBlock.querySelector('.setup-similar-list');
+  var fragment = document.createDocumentFragment();
+
+  wizards.forEach(function (wizard) {
+    fragment.appendChild(getWizardElement(wizard));
   });
 
   similarList.appendChild(fragment);
 };
 
-renderWizardList();
-similarBlock.classList.remove('hidden');
+// Выводит на страницу блок настроек
+
+var showSetupWindow = function () {
+  setup.classList.remove('hidden');
+  similarBlock.classList.remove('hidden');
+};
+
+renderWizards();
+showSetupWindow();
