@@ -7,9 +7,6 @@ var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 var NUMBER_OF_WIZARDS = 4;
 
-// var MIN_NAME_LENGTH = 2;
-// var MAX_NAME_LENGTH = 25;
-
 var setup = document.querySelector('.setup');
 var similarBlock = setup.querySelector('.setup-similar');
 var setupOpen = document.querySelector('.setup-open');
@@ -121,22 +118,12 @@ var onUserNameInvalid = function (evt) {
 };
 
 
-/*
-// Выводит сообщение об ошибке по мере ввода имени
+// Убирает сообщение об ошибке при вводе имени
 
 var onUserNameInput = function (evt) {
-  var valueLength = evt.target.value.length;
-
-  if (valueLength < MIN_NAME_LENGTH) {
-    userNameInput.setCustomValidity('Ещё ' + (MIN_NAME_LENGTH - valueLength) + ' симв.');
-  } else if (valueLength > MAX_NAME_LENGTH) {
-    userNameInput.setCustomValidity('Удалите лишние ' + (valueLength - MIN_NAME_LENGTH) + ' симв.');
-  } else {
-    userNameInput.setCustomValidity('');
-  }
+  evt.target.setCustomValidity('');
 };
 
-*/
 
 // Меняет цвет мантии персонажа
 
@@ -170,6 +157,7 @@ var showSetupWindow = function () {
 
   document.addEventListener('keydown', onSetupEscapePress);
   userNameInput.addEventListener('invalid', onUserNameInvalid);
+  userNameInput.addEventListener('input', onUserNameInput);
   userNameInput.addEventListener('focus', onUserNameFocus);
   userNameInput.addEventListener('blur', onUserNameBlur);
 
@@ -186,6 +174,7 @@ var hideSetupWindow = function () {
 
   document.removeEventListener('keydown', onSetupEscapePress);
   userNameInput.removeEventListener('invalid', onUserNameInvalid);
+  userNameInput.removeEventListener('input', onUserNameInput);
   userNameInput.removeEventListener('focus', onUserNameFocus);
   userNameInput.removeEventListener('blur', onUserNameBlur);
 
