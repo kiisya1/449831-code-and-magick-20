@@ -129,9 +129,6 @@
   setupHandler.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    var startCoordsX = evt.clientX;
-    var startCoordsY = evt.clientY;
-
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
@@ -152,19 +149,14 @@
         y: moveEvt.clientY
       };
 
+      dragged = shift.x !== 0 || shift.y !== 0;
+
       setup.style.top = (setup.offsetTop - shift.y) + 'px';
       setup.style.left = (setup.offsetLeft - shift.x) + 'px';
 
     };
 
     var onMouseUp = function (upEvt) {
-
-      if (startCoordsX === startCoords.x && startCoordsY === startCoords.y) {
-        dragged = false;
-      } else {
-        dragged = true;
-      }
-
       upEvt.preventDefault();
 
       document.removeEventListener('mousemove', onMouseMove);
