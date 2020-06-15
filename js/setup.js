@@ -139,12 +139,16 @@
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      dragged = true;
-
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
       };
+
+      if (shift.x === 0 && shift.y === 0) {
+        dragged = true;
+      } else {
+        dragged = false;
+      }
 
       startCoords = {
         x: moveEvt.clientX,
