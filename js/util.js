@@ -8,16 +8,22 @@
     return Math.floor(rand);
   };
 
-  window.util = {
-    // Выбирает случайное значение из массива данных
-    getRandomElement: function (array) {
-      var randomNumber = generateRandomNumber(0, (array.length - 1));
-      return array[randomNumber];
-    },
-    isEnterEvent: function (evt, action) {
-      if (evt.key === 'Enter') {
-        action();
-      }
+  // Выбирает случайное значение из массива данных
+
+  var getRandomElement = function (array) {
+    var randomNumber = generateRandomNumber(0, (array.length - 1));
+    return array[randomNumber];
+  };
+
+  var isEnterEvent = function (evt, action) {
+    if (evt.key === 'Enter') {
+      action();
     }
+  };
+
+  window.util = {
+    generateRandomNumber: generateRandomNumber,
+    getRandomElement: getRandomElement,
+    isEnterEvent: isEnterEvent
   };
 })();
