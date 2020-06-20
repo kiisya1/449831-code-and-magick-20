@@ -85,12 +85,30 @@
 
   var onLoadWizardsError = function (errorMessage) {
     similarBlock.classList.add('hidden');
-    onBackendError('Ошибка загрузки похожих волшебников: ' + errorMessage);
+    showErrorMassage('Ошибка загрузки похожих волшебников: ' + errorMessage);
+  };
+
+  // Рендерит волшебников, если загрузка была успешной
+
+  var onLoadWizardsSuccess = function (wizards) {
+    renderWizards(wizards);
+  };
+
+  // Закрывает окно настроек при успешной отправке данных на сервер
+
+  var onUploadUserSettingsSuccess = function () {
+    hideSetupWindow();
+  };
+
+  //  Показывает сообщение об ошибке, если произошла ошибка при отправке данных на сервер
+
+  var onUploadUserSettingsError = function (errorMessage) {
+    showErrorMassage(errorMessage);
   };
 
   // Выводит на страницу блок ошибки
 
-  var onBackendError = function (errorMessage) {
+  var showErrorMassage = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -102,8 +120,10 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
+  // Отправляет данные формы на сервер
+
   var onFormSubmit = function (evt) {
-    saveFormData(new FormData(form), hideSetupWindow, onBackendError);
+    saveFormData(new FormData(form), onUploadUserSettingsSuccess, onUploadUserSettingsError);
     evt.preventDefault();
   };
 
@@ -114,7 +134,7 @@
     similarBlock.classList.remove('hidden');
     userNameInput.focused = false;
 
-    loadWizards(renderWizards, onLoadWizardsError);
+    loadWizards(onLoadWizardsSuccess, onLoadWizardsError);
 
     form.addEventListener('submit', onFormSubmit);
     userNameInput.addEventListener('invalid', onUserNameInvalid);
@@ -168,7 +188,5 @@
   setupClose.addEventListener('keydown', function (evt) {
     isEnterEvent(evt, hideSetupWindow);
   });
-
-  // var wizards = generateWizardsObjects(NUMBER_OF_WIZARDS);
 
 })();

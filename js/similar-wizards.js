@@ -12,7 +12,7 @@
   var similarBlock = setup.querySelector('.setup-similar');
 
   var getRandomElement = window.util.getRandomElement;
-  var generateRandomNumber = window.util.generateRandomNumber;
+  var shuffleArray = window.util.shuffleArray;
 
   // Генерирует dom-элемент
 
@@ -49,13 +49,12 @@
   // Добавляет dom-элементы на страницу
 
   var renderWizards = function (wizards) {
-    var randomStart = generateRandomNumber(0, (wizards.length - NUMBER_OF_WIZARDS));
-    var randomEnd = randomStart + NUMBER_OF_WIZARDS;
-    wizards = wizards.slice(randomStart, randomEnd);
+    var shuffledWizards = shuffleArray(wizards);
+    shuffledWizards = shuffledWizards.slice(0, NUMBER_OF_WIZARDS);
     var similarList = similarBlock.querySelector('.setup-similar-list');
     var fragment = document.createDocumentFragment();
 
-    wizards.forEach(function (wizard) {
+    shuffledWizards.forEach(function (wizard) {
       fragment.appendChild(getWizardElement(wizard));
     });
 

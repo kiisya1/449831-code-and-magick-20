@@ -21,9 +21,25 @@
     }
   };
 
+  // Формирует случайный массив из массива данных
+
+  var shuffleArray = function (items) {
+    var j;
+    var temp;
+    var randomItems = items.slice();
+    for (var i = randomItems.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      temp = randomItems[j];
+      randomItems[j] = randomItems[i];
+      randomItems[i] = temp;
+    }
+    return randomItems;
+  };
+
   window.util = {
     generateRandomNumber: generateRandomNumber,
     getRandomElement: getRandomElement,
-    isEnterEvent: isEnterEvent
+    isEnterEvent: isEnterEvent,
+    shuffleArray: shuffleArray
   };
 })();
