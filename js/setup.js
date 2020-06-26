@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
   var COAT_COLORS = window.similarWizards.COAT_COLORS;
   var EYES_COLORS = window.similarWizards.EYES_COLORS;
@@ -19,20 +18,69 @@
   var coatColorInput = setup.querySelector('input[name="coat-color"]');
   var eyesColorInput = setup.querySelector('input[name="eyes-color"]');
   var fireballColorInput = setup.querySelector('input[name="fireball-color"]');
+
   var userPic = setup.querySelector('.upload');
 
-  var renderWizards = window.similarWizards.render;
+  var coatColor = setupWizardCoat.style.fill;
+  var eyesColor = 'black';
 
   var onUserNameInvalid = window.validation.userNameInvalid;
   var onUserNameInput = window.validation.userNameInput;
 
   var isEnterEvent = window.util.isEnterEvent;
-  var getRandomElement = window.util.getRandomElement;
 
   var onUserPicMousedown = window.move;
 
   var loadWizards = window.backend.load;
   var saveFormData = window.backend.save;
+
+  var updateWizards = window.similarWizards.update;
+
+  var debounce = window.debounce;
+
+  var getRandomElement = window.util.getRandomElement;
+
+  var wizards = [];
+
+  // Обновляет похожих магов при изменении цвета плаща
+
+  var onCoatChange = debounce(function (color) {
+    coatColor = color;
+    updateWizards(wizards, coatColor, eyesColor);
+  });
+
+  // Обновляет похожих магов при изменении цвета глаз
+
+  var onEyesChange = debounce(function (color) {
+    eyesColor = color;
+    updateWizards(wizards, coatColor, eyesColor);
+  });
+
+  // Меняет цвет мантии персонажа
+
+  var onWizardCoatClick = function (evt) {
+    var newCoatColor = getRandomElement(COAT_COLORS);
+    evt.target.style.fill = newCoatColor;
+    coatColorInput.value = newCoatColor;
+    onCoatChange(newCoatColor);
+  };
+
+  // Меняет цвет глаз персонажа
+
+  var onWizardEyesClick = function (evt) {
+    var newEyesColor = getRandomElement(EYES_COLORS);
+    evt.target.style.fill = newEyesColor;
+    eyesColorInput.value = newEyesColor;
+    onEyesChange(newEyesColor);
+  };
+
+  // Меняет цвет фаербола
+
+  var onWizardFireballClick = function (evt) {
+    var fireballColor = getRandomElement(FIREBALL_COLORS);
+    evt.target.style.backgroundColor = fireballColor;
+    fireballColorInput.value = fireballColor;
+  };
 
   // Закрывает блок настроек если нажата клавиша Escape
 
@@ -57,30 +105,6 @@
     evt.target.focused = false;
   };
 
-  // Меняет цвет мантии персонажа
-
-  var onWizardCoatClick = function (evt) {
-    var coatColor = getRandomElement(COAT_COLORS);
-    evt.target.style.fill = coatColor;
-    coatColorInput.value = coatColor;
-  };
-
-  // Меняет цвет глаз персонажа
-
-  var onWizardEyesClick = function (evt) {
-    var eyesColor = getRandomElement(EYES_COLORS);
-    evt.target.style.fill = eyesColor;
-    eyesColorInput.value = eyesColor;
-  };
-
-  // Меняет цвет фаербола
-
-  var onWizardFireballClick = function (evt) {
-    var fireballColor = getRandomElement(FIREBALL_COLORS);
-    evt.target.style.backgroundColor = fireballColor;
-    fireballColorInput.value = fireballColor;
-  };
-
   // Прячет блок похожих волшебников и показывает сообщение об ошибке, если произошла ошибка загрузки
 
   var onLoadWizardsError = function (errorMessage) {
@@ -90,8 +114,9 @@
 
   // Рендерит волшебников, если загрузка была успешной
 
-  var onLoadWizardsSuccess = function (wizards) {
-    renderWizards(wizards);
+  var onLoadWizardsSuccess = function (data) {
+    wizards = data;
+    updateWizards(wizards, coatColor, eyesColor);
   };
 
   // Закрывает окно настроек при успешной отправке данных на сервер
