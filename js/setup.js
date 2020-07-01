@@ -18,6 +18,7 @@
   var coatColorInput = setup.querySelector('input[name="coat-color"]');
   var eyesColorInput = setup.querySelector('input[name="eyes-color"]');
   var fireballColorInput = setup.querySelector('input[name="fireball-color"]');
+  var fileChooser = setup.querySelector('input[name="avatar"]');
 
   var userPic = setup.querySelector('.upload');
 
@@ -39,6 +40,8 @@
   var debounce = window.debounce;
 
   var getRandomElement = window.util.getRandomElement;
+
+  var onAvatarChange = window.avatar.change;
 
   var wizards = [];
 
@@ -168,6 +171,7 @@
     userNameInput.addEventListener('input', onUserNameInput);
     document.addEventListener('keydown', onSetupEscapePress);
     userPic.addEventListener('mousedown', onUserPicMousedown);
+    fileChooser.addEventListener('change', onAvatarChange);
 
     setupWizardCoat.addEventListener('click', onWizardCoatClick);
     setupWizardEyes.addEventListener('click', onWizardEyesClick);
@@ -190,6 +194,7 @@
     userNameInput.removeEventListener('focus', onUserNameFocus);
     userNameInput.removeEventListener('blur', onUserNameBlur);
     userPic.removeEventListener('mousedown', onUserPicMousedown);
+    fileChooser.removeEventListener('change', onAvatarChange);
 
     setupWizardCoat.removeEventListener('click', onWizardCoatClick);
     setupWizardEyes.removeEventListener('click', onWizardEyesClick);
